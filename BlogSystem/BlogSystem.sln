@@ -3,11 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30204.135
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BlogSystem.Models", "BlogSystem.Models\BlogSystem.Models.csproj", "{115F0183-E290-4CFE-B96B-85B55084A560}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BlogSystem.Models", "BlogSystem.Models\BlogSystem.Models.csproj", "{115F0183-E290-4CFE-B96B-85B55084A560}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BlogSystem.Common", "BlogSystem.Common\BlogSystem.Common.csproj", "{9FE24DB8-E40A-4354-8DE5-EA547B48AF5A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BlogSystem.Common", "BlogSystem.Common\BlogSystem.Common.csproj", "{9FE24DB8-E40A-4354-8DE5-EA547B48AF5A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BlogSystem.Data", "BlogSystem.Data\BlogSystem.Data.csproj", "{F567E98B-E0DB-4895-9127-D87F3E94D313}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BlogSystem.Data", "BlogSystem.Data\BlogSystem.Data.csproj", "{F567E98B-E0DB-4895-9127-D87F3E94D313}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BlogSystem.Web", "BlogSystem.Web\BlogSystem.Web.csproj", "{10BD736B-CCA6-4D40-B985-B8AE488D49F1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -27,6 +29,10 @@ Global
 		{F567E98B-E0DB-4895-9127-D87F3E94D313}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F567E98B-E0DB-4895-9127-D87F3E94D313}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F567E98B-E0DB-4895-9127-D87F3E94D313}.Release|Any CPU.Build.0 = Release|Any CPU
+		{10BD736B-CCA6-4D40-B985-B8AE488D49F1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{10BD736B-CCA6-4D40-B985-B8AE488D49F1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{10BD736B-CCA6-4D40-B985-B8AE488D49F1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{10BD736B-CCA6-4D40-B985-B8AE488D49F1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
