@@ -5,6 +5,13 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using BlogSystem.Data;
+using System.Reflection;
+using BlogSystem.Common;
+using Microsoft.AspNetCore.Identity;
+using BlogSystem.Data.Repositories;
+using BlogSystem.Data.SeedData;
+using AutoMapper;
+using BlogSystem.Web.Infrastructure.Extensions;
 
 namespace BlogSystem.Web
 {
@@ -24,8 +31,29 @@ namespace BlogSystem.Web
                  .AddDbContext<ApplicationDbContext>(options => options
                      .UseSqlServer(this.Configuration.GetConnectionString("DefaultConnection")))
                  .AddScoped<IApplicationDbContext, ApplicationDbContext>();
+
+
+            services
+                .Configure<IdentityOptions>(options =>
+                {
+                    options.Password.RequireDigit = false;
+                    options.Password.RequiredLength = 6;
+                    options.Password.RequireLowercase = false;
+                    options.Password.RequireNonAlphanumeric = false;
+                    options.Password.RequireUppercase = false;
+                });
+
             services.AddControllersWithViews();
+
             services.AddRazorPages();
+
+            services.AddAutoMapper(Assembly.GetExecutingAssembly());
+
+            services.AddTransient(typeof(IRepository<>), typeof(GenericRepository<>));
+
+            services.AddTransient<IDatabaseSeeder, SettingsSeeder>();
+
+            services.AddTransient<IDatabaseSeeder, AdministratorSeeder>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -57,6 +85,8 @@ namespace BlogSystem.Web
                     pattern: "{controller=Home}/{action=Index}/{id?}");
                 endpoints.MapRazorPages();
             });
+
+            app.Initialize();
         }
     }
 }
