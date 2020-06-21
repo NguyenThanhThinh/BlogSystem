@@ -12,6 +12,7 @@ using BlogSystem.Data.Repositories;
 using BlogSystem.Data.SeedData;
 using AutoMapper;
 using BlogSystem.Web.Infrastructure.Extensions;
+using BlogSystem.Models;
 
 namespace BlogSystem.Web
 {
@@ -32,6 +33,10 @@ namespace BlogSystem.Web
                      .UseSqlServer(this.Configuration.GetConnectionString("DefaultConnection")))
                  .AddScoped<IApplicationDbContext, ApplicationDbContext>();
 
+            services
+                .AddIdentity<AppUser, IdentityRole>(options => options
+                    .SignIn.RequireConfirmedAccount = true)
+                .AddEntityFrameworkStores<ApplicationDbContext>();
 
             services
                 .Configure<IdentityOptions>(options =>
@@ -44,7 +49,6 @@ namespace BlogSystem.Web
                 });
 
             services.AddControllersWithViews();
-
             services.AddRazorPages();
 
             services.AddAutoMapper(Assembly.GetExecutingAssembly());
@@ -52,7 +56,6 @@ namespace BlogSystem.Web
             services.AddTransient(typeof(IRepository<>), typeof(GenericRepository<>));
 
             services.AddTransient<IDatabaseSeeder, SettingsSeeder>();
-
             services.AddTransient<IDatabaseSeeder, AdministratorSeeder>();
         }
 

@@ -1,37 +1,70 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
-using BlogSystem.Web.Models;
-
-namespace BlogSystem.Web.Controllers
+﻿namespace BlogSystem.Web.Controllers
 {
-    public class HomeController : Controller
+    using System;
+    using System.Linq;
+    using System.Text;
+    using AutoMapper;
+    using BlogSystem.Common;
+    using BlogSystem.Models;
+    using BlogSystem.Web.ViewModels.Home;
+    using Microsoft.AspNetCore.Mvc;
+
+    public class HomeController : BaseController
     {
-        private readonly ILogger<HomeController> _logger;
+        private const int PostsPerPageDefaultValue = 5;
 
-        public HomeController(ILogger<HomeController> logger)
+        private readonly IRepository<Post> blogPostsData;
+        private readonly IMapper mapper;
+
+        public HomeController(
+            IRepository<Post> blogPosts, 
+            IMapper mapper)
         {
-            _logger = logger;
+            this.blogPostsData = blogPosts;
+            this.mapper = mapper;
         }
 
-        public IActionResult Index()
+        public ActionResult Index(int page = 1, int perPage = PostsPerPageDefaultValue)
         {
-            return View();
+            var pagesCount = (int)Math.Ceiling(this.blogPostsData.All().Count() / (decimal)perPage);
+
+            var posts = this.mapper
+                .ProjectTo<BlogPostAnnotationViewModel>(this.blogPostsData
+                    .All()
+                    .Where(x => !x.IsDeleted)
+                    .OrderByDescending(x => x.CreatedOn))
+                .ToList()
+                .Skip(perPage * (page - 1))
+                .Take(perPage);
+
+            var model = new IndexViewModel
+            {
+                Posts = posts.ToList(),
+                CurrentPage = page,
+                PagesCount = pagesCount,
+            };
+
+            return this.View(model);
         }
 
-        public IActionResult Privacy()
+        /// <summary>
+        /// Gets the robots.txt file.
+        /// </summary>
+        /// <returns>Returns a robots.txt file.</returns>
+        [HttpGet]
+        [ResponseCache(Duration = 3600)]
+        public FileResult RobotsTxt()
         {
-            return View();
+            var robotsTxtContent = new StringBuilder();
+            robotsTxtContent.AppendLine("User-Agent: *");
+            robotsTxtContent.AppendLine("Allow: /");
+
+            return this.File(Encoding.ASCII.GetBytes(robotsTxtContent.ToString()), "text/plain");
         }
 
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+            return this.View();
         }
     }
 }

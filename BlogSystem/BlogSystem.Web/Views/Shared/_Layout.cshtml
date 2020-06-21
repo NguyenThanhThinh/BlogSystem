@@ -1,49 +1,118 @@
 ﻿<!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
+    <title>@ViewBag.Title - @ViewBag.Settings.Get["Home Title"]</title>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - BlogSystem.Web</title>
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="~/css/site.css" />
+    <meta name="keywords" content="@ViewBag.Settings.Get["Keywords"], @ViewBag.Keywords" />
+    @if (!string.IsNullOrWhiteSpace(ViewBag.Description))
+    {
+        <meta name="description" content="@ViewBag.Description" />
+    }
+    <meta name="robots" content="index, follow" />
+    <meta name="revisit-after" content="1 days" />
+    <meta name="author" content="@ViewBag.Settings.Get["Author"]" />
+    <meta name="generator" content="" />
+    <link rel="shortcut icon" href="/favicon.ico" />
+    <link rel="alternate" type="application/rss+xml" title="Blog RSS" href="/RSS/Blog" />
+
+    <environment names="Development">
+        <link href="~/lib/font-awesome/css/font-awesome.css" rel="stylesheet" asp-append-version="true" />
+        <link href="~/lib/bootstrap/css/bootstrap.css" rel="stylesheet" asp-append-version="true" />
+        <link href="~/css/bootstrap.themes.unify.app.css" rel="stylesheet" asp-append-version="true" />
+        <link href="~/css/bootstrap.themes.unify.css" rel="stylesheet" asp-append-version="true" />
+        <link href="~/css/bootstrap.themes.unify.red.css" rel="stylesheet" asp-append-version="true" />
+        <link href="~/css/site.css" rel="stylesheet" asp-append-version="true" />
+    </environment>
+    <environment names="Staging,Production">
+        <link href="~/lib/font-awesome/css/font-awesome.min.css" rel="stylesheet" asp-append-version="true" />
+        <link href="~/lib/bootstrap/css/bootstrap.min.css" rel="stylesheet" asp-append-version="true" />
+        <link href="~/css/site.min.css" rel="stylesheet" asp-append-version="true" />
+    </environment>
+
+    <script>
+            //GoogleAnalytics
+    </script>
 </head>
-<body>
-    <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">BlogSystem.Web</a>
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
-                    <partial name="_LoginPartial" />
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                        </li>
-                    </ul>
+
+<body class="boxed-layout container">
+    <div id="fb-root"></div>
+    <div class="wrapper">
+        <header class="header">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="navbar-header">
+                        <a class="navbar-brand" href="/">
+                            <img id="logo-header" src="@ViewBag.Settings.Get["Logo URL"]" width="300" height="80" alt="Logo">
+                        </a>
+                    </div>
+                </div>
+
+                <div class="navbar navbar-default col-md-6" role="navigation">
+                    <div class="topbar">
+                        <partial name="_LoginPartial" />
+                    </div>
+                    <div class="clearfix"></div>
+                    <nav class="collapse navbar-collapse navbar-responsive-collapse">
+                        <ul class="nav navbar-nav">
+                            <li><a href="/">Home</a></li>
+                            <vc:menu></vc:menu>
+                            <li><a href="/Videos">My Videos</a></li>
+                            
+                        </ul>
+                    </nav>
                 </div>
             </div>
-        </nav>
-    </header>
-    <div class="container">
-        <main role="main" class="pb-3">
-            @RenderBody()
-        </main>
+        </header>
+
+        <div class="breadcrumbs">
+            <div class="container">
+                <h1 class="pull-left">@ViewBag.Title</h1>
+                @if (IsSectionDefined("breadcrumbs"))
+                {
+                    <ul class="pull-right breadcrumb">
+                        @RenderSection("breadcrumbs", false)
+                    </ul>}
+            </div>
+        </div>
+
+        <div class="container content">
+            <div class="row blog-page">
+                <div class="col-md-9">
+                    @RenderBody()
+                </div>
+
+                <!-- Right Sidebar -->
+                <aside class="col-md-3 magazine-page">
+                    @*@Html.Action("Index", "Sidebar", routeValues: new { area = string.Empty })*@
+                </aside>
+                <!-- End Right Sidebar -->
+            </div>
+        </div>
+
+        <footer class="copyright">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-6">
+                        <p>&copy;@DateTime.Now.Year <strong>@ViewBag.Settings.Get["Blog Name"]</strong></p>
+                    </div>
+                    <div class="col-md-6">
+                        <p class="pull-right"><a href="https://github.com/NguyenThanhThinh/BlogSystem" target="_blank"><i class="fa fa-github"></i> <i class="fa fa-smile-o"></i></a></p>
+                    </div>
+                </div>
+            </div>
+        </footer>
     </div>
 
-    <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2020 - BlogSystem.Web - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-        </div>
-    </footer>
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>
-    @RenderSection("Scripts", required: false)
+    <environment names="Development">
+        <script src="lib/jquery/jquery.js" asp-append-version="true"></script>
+        <script src="lib/bootstrap/js/bootstrap.js" asp-append-version="true"></script>
+    </environment>
+    <environment names="Staging,Production">
+        <script src="lib/jquery/jquery.min.js" asp-append-version="true"></script>
+        <script src="lib/bootstrap/js/bootstrap.min.js" asp-append-version="true"></script>
+    </environment>
+
+    @RenderSection("scripts", required: false)
 </body>
 </html>
